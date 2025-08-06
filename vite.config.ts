@@ -6,9 +6,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     // https://stackoverflow.com/a/74430384
+    //port: 5769, // ✅ เพิ่มบรรทัดนี้เพื่อใช้ port ของตัวเอง
     proxy: {
       "/api": {
-        target: "http://localhost:3000",
+        target: "http://localhost:3769",
         changeOrigin: true,
         secure: false,
         ws: true,

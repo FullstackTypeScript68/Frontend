@@ -1,0 +1,45 @@
+/* index.css */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: system-ui, sans-serif;
+  background-color: white; /* หรือใช้ #fff */
+  color: black;
+  overflow-x: hidden;
+}
+
+/* ปิด max-width ของ container ที่ pico.css ใส่มา */
+.container {
+  max-width: none !important;
+  width: 100vw;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+
+/* ถ้าคุณมีปุ่ม toggle ธีม */
+.theme-toggle-button {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  z-index: 999;
+  background-color: #333;
+  color: white;
+}
+
+.theme-toggle-button.light {
+  background-color: #e2e2e2;
+  color: #222;
+}

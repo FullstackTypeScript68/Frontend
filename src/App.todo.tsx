@@ -3,7 +3,6 @@ import axios from "axios";
 import { type TodoItem } from "./types";
 import dayjs from "dayjs";
 
-//เพิ่มมา--------------------------------------------------
 type OwnerItem = {
   id: string;
   name: string;
@@ -12,16 +11,14 @@ type OwnerItem = {
   createdAt: string;
   updatedAt?: string;
 };
-//เพิ่มมา--------------------------------------------------
 
 function App() {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [inputText, setInputText] = useState("");
   const [mode, setMode] = useState<"ADD" | "EDIT">("ADD");
   const [curTodoId, setCurTodoId] = useState("");
-
-  //เพิ่มมา--------------------------------------------------
   const [owners, setOwners] = useState<OwnerItem[]>([]);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
     fetchData();
@@ -31,24 +28,17 @@ function App() {
   async function fetchOwners() {
     try {
       const res = await axios.get<OwnerItem[]>("/api/todo/owner");
-      console.log("📦 Owners:", res.data); // 👈 เพิ่มตรงนี้
+      console.log("📦 Owners:", res.data);
       setOwners(res.data);
     } catch (err) {
       console.error("❌ Failed to fetch owner list", err);
     }
   }
-  //เพิ่มมา--------------------------------------------------
 
   async function fetchData() {
     const res = await axios.get<TodoItem[]>("api/todo");
     setTodos(res.data);
   }
-
-  //ของเก่า---------------------------------
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-  //--------------------------------------
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputText(e.target.value);
@@ -101,56 +91,123 @@ function App() {
     setInputText("");
     setCurTodoId("");
   }
+
   return (
-    <div className="container">
+    <div
+      className="container"
+      style={{
+        backgroundColor: isDarkMode ? "#121212" : "#f5f5f5",
+        color: isDarkMode ? "#ffffff" : "#000000",
+        minHeight: "100vh",
+        margin: 0,
+        padding: "2rem",
+        transition: "all 0.3s ease-in-out",
+        overflowX: "hidden",
+      }}
+    >
+      {/* 🔄 ปุ่มเปลี่ยนธีม */}
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <button
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          style={{
+            fontSize: "0.85rem",
+            padding: "0.4rem 0.8rem",
+            borderRadius: "20px",
+            backgroundColor: isDarkMode ? "#eee" : "#333",
+            color: isDarkMode ? "#333" : "#fff",
+            border: "none",
+            cursor: "pointer",
+            boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+            marginBottom: "1rem",
+          }}
+        >
+          {isDarkMode ? "🌞 Light Mode" : "🌙 Dark Mode"}
+        </button>
+      </div>
+
+      {/* 👇 ส่วน Header */}
       <header>
-        <h1>TODO APP</h1>
+        <h1
+          style={{
+            marginBottom: "1.5rem",
+            fontSize: "2.2rem",
+            color: isDarkMode ? "#fff" : "#1a1a1a", // ✅ เพิ่มเงื่อนไขสี
+          }}
+        >
+          TODO APP
+        </h1>
       </header>
+
+      {/* 👨‍🏫 Owner List */}
       <section
         style={{
-          backgroundColor: "#fff",
-          color: "#000",
+          backgroundColor: isDarkMode ? "#1e1e1e" : "#fff",
+          color: isDarkMode ? "#fff" : "#000",
           padding: "1.5rem",
           borderRadius: "12px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+          boxShadow: isDarkMode
+            ? "0 4px 12px rgba(255,255,255,0.05)"
+            : "0 4px 12px rgba(0, 0, 0, 0.1)",
           marginBottom: "2rem",
+          maxWidth: "900px",
+          marginInline: "auto",
         }}
       >
-        <h2 style={{ marginBottom: "1rem", fontSize: "1.5rem" }}>
-          👨‍🏫 Owner List
+        <h2
+          style={{
+            marginBottom: "1rem",
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}
+        >
+          🧑‍🏫 <span>Owner List</span>
         </h2>
 
         {owners.length === 0 ? (
-          <p style={{ fontStyle: "italic", color: "#666" }}>No owners found.</p>
+          <p
+            style={{ fontStyle: "italic", color: isDarkMode ? "#aaa" : "#666" }}
+          >
+            No owners found.
+          </p>
         ) : (
           <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.75rem",
-            }}
+            style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
           >
             {owners.map((owner) => (
               <div
                 key={owner.id}
                 style={{
-                  backgroundColor: "#f5f5f5",
+                  backgroundColor: isDarkMode ? "#2c2c2c" : "#f7f7f7",
                   padding: "0.75rem 1rem",
-                  borderRadius: "8px",
+                  borderRadius: "10px",
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}
               >
                 <div>
-                  <strong>{owner.name}</strong>
-                  <div style={{ fontSize: "0.9rem", color: "#555" }}>
-                    📚 Course: {owner.courseId} &nbsp;&nbsp; | &nbsp;&nbsp; 🎯
-                    Section: {owner.section}
+                  <strong style={{ fontSize: "1.1rem" }}>{owner.name}</strong>
+                  <div
+                    style={{
+                      fontSize: "0.9rem",
+                      color: isDarkMode ? "#ccc" : "#555",
+                      marginTop: "4px",
+                    }}
+                  >
+                    📚 Course: {owner.courseId} &nbsp;|&nbsp; 🎯 Section:{" "}
+                    {owner.section}
                   </div>
                 </div>
-                <div style={{ fontSize: "0.8rem", color: "#888" }}>
-                  🕓 {dayjs(owner.createdAt).format("DD MMM YYYY, HH:mm")}
+                <div
+                  style={{
+                    fontSize: "0.8rem",
+                    color: isDarkMode ? "#bbb" : "#888",
+                  }}
+                >
+                  ⏰ {dayjs(owner.createdAt).format("DD MMM YYYY, HH:mm")}
                 </div>
               </div>
             ))}
@@ -158,39 +215,76 @@ function App() {
         )}
       </section>
 
-      <main>
+      {/* 📋 Todo Input & List */}
+      <main style={{ maxWidth: "900px", marginInline: "auto" }}>
         <div style={{ display: "flex", alignItems: "start" }}>
           <input
             type="text"
             onChange={handleChange}
             value={inputText}
             data-cy="input-text"
+            placeholder="Add your task..."
+            style={{
+              padding: "0.5rem",
+              borderRadius: "6px",
+              border: "1px solid #ccc",
+              marginRight: "0.5rem",
+              flex: 1,
+              backgroundColor: isDarkMode ? "#222" : "#fff",
+              color: isDarkMode ? "#fff" : "#000",
+            }}
           />
-          <button onClick={handleSubmit} data-cy="submit">
+          <button
+            onClick={handleSubmit}
+            data-cy="submit"
+            style={{
+              padding: "0.5rem 1rem",
+              borderRadius: "6px",
+              backgroundColor: "#4CAF50",
+              color: "#fff",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
             {mode === "ADD" ? "Submit" : "Update"}
           </button>
           {mode === "EDIT" && (
-            <button onClick={handleCancel} className="secondary">
+            <button
+              onClick={handleCancel}
+              className="secondary"
+              style={{
+                marginLeft: "0.5rem",
+                padding: "0.5rem 1rem",
+                borderRadius: "6px",
+                backgroundColor: "#ccc",
+                border: "none",
+              }}
+            >
               Cancel
             </button>
           )}
         </div>
-        <div data-cy="todo-item-wrapper">
+
+        <div data-cy="todo-item-wrapper" style={{ marginTop: "1rem" }}>
           {todos.sort(compareDate).map((item, idx) => {
             const { date, time } = formatDateTime(item.createdAt);
-            const text = item.todoText;
             return (
               <article
                 key={item.id}
                 style={{
                   display: "flex",
                   gap: "0.5rem",
+                  alignItems: "center",
+                  backgroundColor: isDarkMode ? "#1f1f1f" : "#eee",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "6px",
+                  marginBottom: "0.5rem",
                 }}
               >
                 <div>({idx + 1})</div>
                 <div>📅{date}</div>
                 <div>⏰{time}</div>
-                <div data-cy="todo-item-text">📰{text}</div>
+                <div data-cy="todo-item-text">📰{item.todoText}</div>
                 <div
                   style={{ cursor: "pointer" }}
                   onClick={() => {
@@ -202,7 +296,6 @@ function App() {
                 >
                   {curTodoId !== item.id ? "🖊️" : "✍🏻"}
                 </div>
-
                 {mode === "ADD" && (
                   <div
                     style={{ cursor: "pointer" }}

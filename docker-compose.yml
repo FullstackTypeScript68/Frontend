@@ -4,7 +4,7 @@ services:
     container_name: pf-frontend
     build: .
     ports:
-      - ${NGINX_PORT}:5173
+      - ${NGINX_PORT}:5175
     networks:
       - preflight_pf-net
     environment:
