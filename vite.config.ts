@@ -30,6 +30,12 @@ export default defineConfig({
           });
         },
       },
+      "/uploads": {
+        // ✅ ต้องมีบล็อกนี้
+        target: "http://localhost:3769",
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 });

@@ -4,4 +4,6 @@ export interface TodoItem {
   isDone: boolean;
   createdAt: string;
   updatedAt: string;
+  // add this:
+  imageUrl?: string | null;
 }

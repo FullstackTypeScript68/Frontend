@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 //import App from "./App.tsx";
 //import App from "./App.full"; // ✅ ใช้ App.full.tsx แทน
-import App from "./App.todo";
+//import App from "./App.todo";
+import App from "./App.todoList";
 import "./index.css";
 
 //import "@picocss/pico/css/pico.violet.min.css";
