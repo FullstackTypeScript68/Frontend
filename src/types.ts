@@ -7,3 +7,13 @@ export interface TodoItem {
   // add this:
   imageUrl?: string | null;
 }
+
+// เพิ่ม OwnerItem
+export type OwnerItem = {
+  id: string;
+  name: string;
+  courseId: string;
+  section: string;
+  createdAt: string;
+  updatedAt?: string | null;
+};

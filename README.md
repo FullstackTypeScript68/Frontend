@@ -26,3 +26,6 @@
 
 - `docker tag preflight-frontend [DOCKERHUB_ACCOUNT]/preflight-frontend:latest`
 - `docker push [DOCKERHUB_ACCOUNT]/preflight-frontend:latest`
+
+# navigatetion
+- pnpm add react-router-dom

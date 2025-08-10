@@ -1,16 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-//import App from "./App.tsx";
-//import App from "./App.full"; // ✅ ใช้ App.full.tsx แทน
-//import App from "./App.todo";
-import App from "./App.todoList";
 import "./index.css";
+
+import { BrowserRouter as Router } from "react-router-dom";
+import App from "./manageRoute.tsx";
 
 //import "@picocss/pico/css/pico.violet.min.css";
 import "@picocss/pico/css/pico.lime.min.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <Router>
+      {" "}
+      {/* Wrap the application in BrowserRouter to enable routing */}
+      <App /> {/* Render the App component which contains the routes */}
+    </Router>
   </React.StrictMode>
 );

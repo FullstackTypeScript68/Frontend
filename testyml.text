@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  web:
+    image: nginx:alpine
+    container_name: pf-web
+    ports:
+      - "5175:5175"
+    environment:
+      NGINX_PORT: 5175
+      NGINX_PROXY: http://pf-backend:3769     # << เรียกด้วยชื่อคอนเทนเนอร์ backend
+    volumes:
+      - ./nginx.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./dist:/usr/share/nginx/html:ro       # << ใช้ไฟล์ build แล้วเท่านั้น
+    command: /bin/sh -c "envsubst '$$NGINX_PORT $$NGINX_PROXY' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    depends_on:
+      - dummy_dep
+    networks:
+      - preflight_pf-net
+
+  # ทริกเล็ก ๆ เพื่อให้ compose สร้าง network แม้ไม่มี service ในไฟล์เดียวกัน
+  dummy_dep:
+    image: busybox
+    command: sh -c "exit 0"
+    networks:
+      - pf-net
+
+networks:
+  pf-net:
+    external: true
+    name: preflight_pf-net
+

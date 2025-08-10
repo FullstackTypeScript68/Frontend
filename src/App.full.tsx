@@ -2,53 +2,20 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { type TodoItem } from "./types";
 import dayjs from "dayjs";
-
-//เพิ่มมา--------------------------------------------------
-type OwnerItem = {
-  id: string;
-  name: string;
-  courseId: string;
-  section: string;
-  createdAt: string;
-  updatedAt?: string;
-};
-//เพิ่มมา--------------------------------------------------
-
 function App() {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [inputText, setInputText] = useState("");
   const [mode, setMode] = useState<"ADD" | "EDIT">("ADD");
   const [curTodoId, setCurTodoId] = useState("");
 
-  //เพิ่มมา--------------------------------------------------
-  const [owners, setOwners] = useState<OwnerItem[]>([]);
-
-  useEffect(() => {
-    fetchData();
-    fetchOwners();
-  }, []);
-
-  async function fetchOwners() {
-    try {
-      const res = await axios.get<OwnerItem[]>("/api/todo/owner");
-      console.log("📦 Owners:", res.data); // 👈 เพิ่มตรงนี้
-      setOwners(res.data);
-    } catch (err) {
-      console.error("❌ Failed to fetch owner list", err);
-    }
-  }
-  //เพิ่มมา--------------------------------------------------
-
   async function fetchData() {
     const res = await axios.get<TodoItem[]>("api/todo");
     setTodos(res.data);
   }
 
-  //ของเก่า---------------------------------
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-  //--------------------------------------
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setInputText(e.target.value);
@@ -104,60 +71,8 @@ function App() {
   return (
     <div className="container">
       <header>
-        <h1>TODO APP</h1>
+        <h1>Todo App</h1>
       </header>
-      <section
-        style={{
-          backgroundColor: "#fff",
-          color: "#000",
-          padding: "1.5rem",
-          borderRadius: "12px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-          marginBottom: "2rem",
-        }}
-      >
-        <h2 style={{ marginBottom: "1rem", fontSize: "1.5rem" }}>
-          👨‍🏫 Owner List
-        </h2>
-
-        {owners.length === 0 ? (
-          <p style={{ fontStyle: "italic", color: "#666" }}>No owners found.</p>
-        ) : (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.75rem",
-            }}
-          >
-            {owners.map((owner) => (
-              <div
-                key={owner.id}
-                style={{
-                  backgroundColor: "#f5f5f5",
-                  padding: "0.75rem 1rem",
-                  borderRadius: "8px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <div>
-                  <strong>{owner.name}</strong>
-                  <div style={{ fontSize: "0.9rem", color: "#555" }}>
-                    📚 Course: {owner.courseId} &nbsp;&nbsp; | &nbsp;&nbsp; 🎯
-                    Section: {owner.section}
-                  </div>
-                </div>
-                <div style={{ fontSize: "0.8rem", color: "#888" }}>
-                  🕓 {dayjs(owner.createdAt).format("DD MMM YYYY, HH:mm")}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
-
       <main>
         <div style={{ display: "flex", alignItems: "start" }}>
           <input
