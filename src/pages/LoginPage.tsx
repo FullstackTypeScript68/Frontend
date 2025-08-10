@@ -271,7 +271,7 @@ body {
         <header className="app-header">
           <div className="app-title-wrapper">
             <div className="app-icon">📝</div>
-            <h1 className="app-title">I like this</h1>
+            <h1 className="app-title">I like</h1>
           </div>
         </header>
 
